@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <title> |Quotes| </title>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h5 style="text-align: right">
+            <a href="/logout">Logout</a>
+        </h5>
+        <h5>
+            <b> Welcome, {{user.alias}} !</b>
+        </h5>
+        <h4>Your Favourite:</h4>
+        <table class='table table-striped'>
+            <tbody>
+                {%for favourite in favourites%}
+
+                <tr>
+                    <td>{{favourite.content}} </td>
+                </tr>
+                <tr>
+                    <td>Post By:
+                        <a href="/show/{{favourite.id}}">{{favourite.contributor.name}}</a> |
+                        <a href="/removefav/{{favourite.id}}">Remove Favourite</a>
+                    </td>
+                </tr>
+
+                {%endfor%}
+
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <div class="container">
+        <h4>Quotable Quotes:</h4>
+        <table class='table table-striped'>
+            <tbody>
+                {%for quote in quotes%}
+                <tr>
+                    <td>
+                        <b>{{quote.quoteby}}:</b> {{quote.content}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        Posted By:
+                        <a href="/show/{{quote.id}}">{{quote.contributor.name}}</a>
+                    </td>
+                    <form class="" action="/addfav/{{quote.id}}" method="POST">
+                        {% csrf_token %}
+                        <td>
+                            <input type="Submit" name="add" value="Add My List">
+                        </td>
+                    </form>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <div class="container">
+        <br> {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="container">
+        <form action="/createquote" class="col s12" method="POST">
+            <div class="">
+                {% csrf_token %}
+                <h3>Contribute a Quote:</h3>
+                <label for="input1">Quoted By:</label>
+                <input type="text" name="quoteby" class="materialize-textarea"></input>
+                <br>
+                <label for="textarea2">Message:</label>
+                <textarea name="content" class="materialize-textarea"></textarea>
+                <input type="submit" name="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    <br>
+</body>
+
+</html>
